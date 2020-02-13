@@ -3,9 +3,8 @@ import ecdcpipeline.ContainerBuildNode
 import ecdcpipeline.PipelineBuilder
 
 containerBuildNodes = [
-  'centos-debug': ContainerBuildNode.getDefaultContainerBuildNode('centos7'),
-  'centos-release': ContainerBuildNode.getDefaultContainerBuildNode('centos7'),
-  'ubuntu': new ContainerBuildNode('essdmscdm/ubuntu18.04-build-node:1.1.0', 'bash -e')
+  'centos': ContainerBuildNode.getDefaultContainerBuildNode('centos7'),
+  'ubuntu': ContainerBuildNode.getDefaultContainerBuildNode('ubuntu1804')
 ]
 
 pipelineBuilder = new PipelineBuilder(this, containerBuildNodes, "/home/jenkins/data:/var/data")
