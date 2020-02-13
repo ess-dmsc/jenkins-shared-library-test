@@ -13,14 +13,14 @@ pipelineBuilder.activateEmailFailureNotifications()
 
 builders = pipelineBuilder.createBuilders { container ->
 
-  pipeline_builder.stage("${container.key}: Checkout") {
-    dir(pipeline_builder.project) {
+  pipelineBuilder.stage("${container.key}: Checkout") {
+    dir(pipelineBuilder.project) {
       scm_vars = checkout scm
     }
-    container.copyTo(pipeline_builder.project, pipeline_builder.project)
+    container.copyTo(pipelineBuilder.project, pipelineBuilder.project)
   }  // stage
 
-  pipeline_builder.stage("${container.key}: Dependencies") {
+  pipelineBuilder.stage("${container.key}: Dependencies") {
     def conan_remote = "ess-dmsc-local"
     container.sh """
       mkdir build
@@ -28,7 +28,7 @@ builders = pipelineBuilder.createBuilders { container ->
       conan remote add \
         --insert 0 \
         ${conan_remote} ${local_conan_server}
-      conan install --build=outdated ../${pipeline_builder.project}/conan/conanfile.txt
+      conan install --build=outdated ../${pipelineBuilder.project}/conan/conanfile.txt
     """
   }  // stage
 
