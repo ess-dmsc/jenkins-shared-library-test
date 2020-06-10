@@ -36,6 +36,7 @@ builders = pipelineBuilder.createBuilders { container ->
 // Checkout code on coordinator node and start builders in parallel.
 node {
   checkout scm
+  pipelineBuilder.abortBuildOnMagicCommitMessage()
   try {
     parallel builders
     } catch (e) {
