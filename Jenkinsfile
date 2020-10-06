@@ -1,4 +1,4 @@
-@Library('ecdc-pipeline')
+@Library('ecdc-pipeline-test')
 import ecdcpipeline.ImageRemover
 
 def names = [
