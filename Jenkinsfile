@@ -35,5 +35,6 @@ timeout(time: 1, unit: 'HOURS') {
       // Archive build metadata.
       pipeline_builder.archiveBuildInfo()
     }
+    cleanWs()
   }
 }
