@@ -1,6 +1,6 @@
 @Library('ecdc-pipeline-test')
 import ecdcpipeline.PipelineBuilder
-import ecdcpipeline.PipelineBuilder
+import ecdcpipeline.ContainerBuildNode
 
 container_build_nodes = [
   'centos7': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc8'),
