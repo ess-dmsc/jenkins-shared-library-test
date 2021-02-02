@@ -1,45 +1,36 @@
 @Library('ecdc-pipeline-test')
-import ecdcpipeline.ImageRemover
+import ecdcpipeline.PipelineBuilder
+import ecdcpipeline.PipelineBuilder
 
-def names = [
-  'dmbuild01.dm.esss.dk',
-  'dmbuild02.dm.esss.dk',
-  'dmbuild05.dm.esss.dk',
-  'dmbuild06.dm.esss.dk',
-  'dmbuild07.dm.esss.dk',
-  'dmbuild08.dm.esss.dk',
-  'dmbuild09.dm.esss.dk',
-  'dmbuild10.dm.esss.dk',
-  'dmbuild11.dm.esss.dk',
-  // 'dmbuild20.dm.esss.dk',
-  // 'dmbuild21.dm.esss.dk',
-  // 'dmbuild22.dm.esss.dk',
-  // 'dmbuild23.dm.esss.dk',
-  // 'dmbuild24.dm.esss.dk',
-  // 'dmbuild25.dm.esss.dk',
-  // 'dmbuild26.dm.esss.dk',
-  // 'systest01.dm.esss.dk',
-  // 'systest02.dm.esss.dk'
+container_build_nodes = [
+  'centos7': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc8'),
+  'centos7-release': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc8'),
+  'debian10': ContainerBuildNode.getDefaultContainerBuildNode('debian10'),
+  'ubuntu1804': ContainerBuildNode.getDefaultContainerBuildNode('ubuntu1804-gcc8')
 ]
 
-imageRemover = new ImageRemover(this)
+pipeline_builder = new PipelineBuilder(this, container_build_nodes)
 
-def builders = [:]
-for (x in names) {
-  def name = x
-  builders[name] = {
-    node(name) {
-      checkout scm
-
-      stage('Remove Docker Images') {
-        imageRemover.cleanImages()
-      }
-
-      cleanWs()
+pipeline_builder.createBuilders { -> container
+  pipeline_builder.stage("${container.key}: checkout") {
+    dir(pipeline_builder.project) {
+      scm_vars = checkout scm
     }
-  }
+    // Copy source code to container
+    container.copyTo(pipeline_builder.project, pipeline_builder.project)
+  }  // stage
+
+  pipeline_builder.stage("${container.key}: get dependencies") {
+    container.sh """
+      pwd
+      ls
+    """
+  }  // stage
 }
 
 timeout(time: 1, unit: 'HOURS') {
-  parallel builders
+  node('docker') {
+    parallel builders
+  }
+  pipeline_builder.archiveBuildInfo()
 }
