@@ -31,6 +31,6 @@ builders = pipeline_builder.createBuilders { container ->
 timeout(time: 1, unit: 'HOURS') {
   node('docker') {
     parallel builders
+    pipeline_builder.archiveBuildInfo()
   }
-  pipeline_builder.archiveBuildInfo()
 }
