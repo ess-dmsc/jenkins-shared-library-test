@@ -3,10 +3,10 @@ import ecdcpipeline.PipelineBuilder
 import ecdcpipeline.ContainerBuildNode
 
 container_build_nodes = [
-  'centos7': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc8'),
-  'centos7-release': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc8'),
-  'debian10': ContainerBuildNode.getDefaultContainerBuildNode('debian10'),
-  'ubuntu1804': ContainerBuildNode.getDefaultContainerBuildNode('ubuntu1804-gcc8')
+  'centos7': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc11'),
+  'centos7-release': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc11'),
+  'debian10': ContainerBuildNode.getDefaultContainerBuildNode('debian11'),
+  'ubuntu1804': ContainerBuildNode.getDefaultContainerBuildNode('ubuntu2204')
 ]
 
 pipeline_builder = new PipelineBuilder(this, container_build_nodes)
